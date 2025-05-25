@@ -45,10 +45,7 @@ const BookingComponent = ({ booking, setDialogOpen, setCurrentBookingId }) => {
         <p className="font-semibold text-lg">Time:</p>
         <p className="text-right ml-2">{booking.time}</p>
       </div>
-      <div className="flex text-center items-start justify-between mb-3 mx-2">
-        <p className="font-semibold text-lg">Duration:</p>
-        <p className="text-right ml-2">{booking.escaperoom.duration} min</p>
-      </div>
+
       <div className="text-center mb-2 mx-2">
         <p className="">{booking.escaperoom.description}</p>
       </div>

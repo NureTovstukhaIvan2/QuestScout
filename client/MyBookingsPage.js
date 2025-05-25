@@ -61,10 +61,6 @@ const MyBookingsPage = () => {
 
   return (
     <div className="text-slate-100 min-h-screen px-5 py-10 bg-zinc-950">
-      <h1 className="text-3xl font-bold mb-5 underline decoration-orange-600">
-        My Bookings
-      </h1>
-
       <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-14 lg:grid-cols-3 lg:px-3">
         {userBookings?.map((booking) => (
           <BookingComponent

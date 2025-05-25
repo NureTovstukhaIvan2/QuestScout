@@ -23,8 +23,6 @@ const Booking = ({
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [timeSlots, setTimeSlots] = useState([]);
   const [playerOptions, setPlayerOptions] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState(null);
 
   const { data: allEscapeRoomsData } = useQuery(QUERY_AllESCAPEROOMS);
 
@@ -76,30 +74,6 @@ const Booking = ({
       setFormData({ ...formData, time: timeSlots[0] });
     }
   }, [timeSlots]);
-
-  useEffect(() => {
-    if (escapeRooms.length > 0 && formData.escape_room_id) {
-      const room = escapeRooms.find(
-        (room) => room.id === formData.escape_room_id
-      );
-
-      if (room) {
-        setSelectedRoom(room);
-        const options = [];
-        for (let i = room.playersMin; i <= room.playersMax; i++) {
-          options.push(i);
-        }
-        setPlayerOptions(options);
-
-        setFormData({
-          ...formData,
-          numberOfPlayers: room.playersMin,
-          escape_room_image: room.image_url,
-          escape_room_description: room.description,
-        });
-      }
-    }
-  }, [escapeRooms, formData.escape_room_id]);
 
   const openSnackBar = (
     message = "Something went wrong. Please try again later."

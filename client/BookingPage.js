@@ -29,14 +29,6 @@ const BookingPage = () => {
       id="main"
       className="min-h-screen bg-zinc-950 text-slate-100 mx-auto px-6 py-12 md:px-12 lg:px-12"
     >
-      <BookingFormComponent
-        confirmationPage={confirmationPage}
-        setConfirmationPage={setConfirmationPage}
-        escapeRooms={escapeRooms}
-        setEscapeRooms={setEscapeRooms}
-        formData={formData}
-        setFormData={setFormData}
-      />
       {confirmationPage ? (
         <BookingConfirmationComponent
           bookingDetails={{
