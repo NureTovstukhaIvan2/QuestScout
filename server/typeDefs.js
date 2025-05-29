@@ -48,6 +48,11 @@ const typeDefs = gql`
     escaperoom: EscapeRoom
   }
 
+  type AvailableSlot {
+    date: String!
+    time: String!
+  }
+
   type Auth {
     token: ID!
     user: User
@@ -57,11 +62,40 @@ const typeDefs = gql`
     me: User
     getAllEscapeRooms: [EscapeRoom]
     getEscapeRoom(id: Int!): EscapeRoom
-    availableSlots(escape_room_id: Int!, date: String!): [String!]
+    availableSlots(
+      escape_room_id: Int!
+      start_date: String!
+      end_date: String!
+    ): [AvailableSlot]!
     getSingleBooking(booking_id: Int!): Booking
     getAllUserBookings: [Booking]
   }
 
-
+  type Mutation {
+    login(email: String!, password: String!): Auth
+    createUser(
+      firstName: String!
+      lastName: String!
+      email: String!
+      password: String!
+    ): Auth
+    updateEmail(email: String!): User
+    updatePassword(currentPassword: String!, newPassword: String!): User
+    createBooking(
+      escape_room_id: Int!
+      numberOfPlayers: Int!
+      date: String!
+      time: String!
+    ): Booking
+    updateBookingPayment(
+      booking_id: Int!
+      payment_status: String!
+      payment_amount: Float!
+      payment_method: String!
+    ): Booking
+    deleteBooking(booking_id: Int!): Boolean!
+    createReview(escape_room_id: Int!, rating: Float, comment: String): Review
+  }
+`;
 
 module.exports = typeDefs;
