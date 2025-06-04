@@ -39,7 +39,7 @@ Booking.init(
       allowNull: false,
     },
     payment_status: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM("pending", "completed", "cancelled"),
       defaultValue: "pending",
     },
     payment_amount: {
@@ -47,6 +47,10 @@ Booking.init(
     },
     payment_method: {
       type: DataTypes.STRING,
+    },
+    status: {
+      type: DataTypes.ENUM("active", "completed", "cancelled"),
+      defaultValue: "active",
     },
   },
   {

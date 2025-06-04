@@ -6,6 +6,7 @@ const typeDefs = gql`
     firstName: String!
     lastName: String!
     email: String!
+    isAdmin: Boolean!
   }
 
   type Review {
@@ -14,8 +15,10 @@ const typeDefs = gql`
     escape_room_id: Int!
     rating: Float
     comment: String
+    reply: String
     created_at: String!
     user: User
+    escaperoom: EscapeRoom
   }
 
   type EscapeRoom {
@@ -45,7 +48,9 @@ const typeDefs = gql`
     payment_status: String!
     payment_amount: Float!
     payment_method: String
+    status: String!
     escaperoom: EscapeRoom
+    user: User
   }
 
   type AvailableSlot {
@@ -56,6 +61,30 @@ const typeDefs = gql`
   type Auth {
     token: ID!
     user: User
+  }
+
+  input EscapeRoomInput {
+    theme: String!
+    genre: String!
+    difficulty: String!
+    ageGroup: String!
+    playersMin: Int!
+    playersMax: Int!
+    price: Int!
+    description: String!
+    duration: Int!
+    image_url: String
+  }
+
+  input UpdateBookingInput {
+    payment_status: String
+    payment_amount: Float
+    payment_method: String
+    status: String
+  }
+
+  input UpdateReviewInput {
+    reply: String
   }
 
   type Query {
@@ -69,6 +98,11 @@ const typeDefs = gql`
     ): [AvailableSlot]!
     getSingleBooking(booking_id: Int!): Booking
     getAllUserBookings: [Booking]
+    getCompletedBookings: [Booking]
+    getAllBookings: [Booking]
+    getAllUsers: [User]
+    getAllReviews: [Review]
+    getReview(id: Int!): Review
   }
 
   type Mutation {
@@ -87,14 +121,22 @@ const typeDefs = gql`
       date: String!
       time: String!
     ): Booking
+    updateBooking(booking_id: Int!, input: UpdateBookingInput!): Booking
     updateBookingPayment(
       booking_id: Int!
       payment_status: String!
       payment_amount: Float!
       payment_method: String!
     ): Booking
+    completeExpiredBookings: Boolean
     deleteBooking(booking_id: Int!): Boolean!
     createReview(escape_room_id: Int!, rating: Float, comment: String): Review
+    updateReview(id: Int!, input: UpdateReviewInput!): Review
+    deleteReview(id: Int!): Boolean!
+    createEscapeRoom(input: EscapeRoomInput!): EscapeRoom
+    updateEscapeRoom(id: Int!, input: EscapeRoomInput!): EscapeRoom
+    deleteEscapeRoom(id: Int!): Boolean!
+    deleteUser(id: Int!): Boolean!
   }
 `;
 
