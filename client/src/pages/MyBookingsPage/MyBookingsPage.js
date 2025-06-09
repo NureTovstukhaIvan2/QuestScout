@@ -126,7 +126,7 @@ const MyBookingsPage = () => {
             {formattedBookings?.map((booking) => (
               <div
                 key={booking.id}
-                className="bg-zinc-900 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 relative group"
+                className="bg-zinc-900 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 relative group flex flex-col h-full"
               >
                 <button
                   onClick={() => {
@@ -149,22 +149,24 @@ const MyBookingsPage = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent"></div>
                 </div>
 
-                <div className="p-6">
-                  <h2 className="text-xl font-bold mb-2 relative inline-block underline decoration-orange-600">
-                    {booking.escaperoom.theme}
-                  </h2>
+                <div className="p-6 flex flex-col flex-grow">
+                  <div className="min-h-[3.5rem] mb-3">
+                    <h2 className="text-xl font-bold line-clamp-2">
+                      {booking.escaperoom.theme}
+                    </h2>
+                  </div>
 
-                  <div className="space-y-3 text-slate-300">
+                  <div className="space-y-3 text-slate-300 mb-4">
                     <div className="flex items-center">
-                      <FaCalendarAlt className="text-orange-500 mr-2" />
-                      <span>{booking.formattedDate}</span>
+                      <FaCalendarAlt className="text-orange-500 mr-2 min-w-[16px]" />
+                      <span className="truncate">{booking.formattedDate}</span>
                     </div>
                     <div className="flex items-center">
-                      <FaClock className="text-orange-500 mr-2" />
+                      <FaClock className="text-orange-500 mr-2 min-w-[16px]" />
                       <span>{booking.time}</span>
                     </div>
                     <div className="flex items-center">
-                      <FaUsers className="text-orange-500 mr-2" />
+                      <FaUsers className="text-orange-500 mr-2 min-w-[16px]" />
                       <span>
                         {booking.numberOfPlayers} player
                         {booking.numberOfPlayers !== 1 ? "s" : ""} (max:{" "}
@@ -172,14 +174,14 @@ const MyBookingsPage = () => {
                       </span>
                     </div>
                     <div className="flex items-center">
-                      <FaMoneyBillWave className="text-orange-500 mr-2" />
+                      <FaMoneyBillWave className="text-orange-500 mr-2 min-w-[16px]" />
                       <span>
                         {booking.escaperoom.price * booking.numberOfPlayers} UAH
                       </span>
                     </div>
                   </div>
 
-                  <div className="mt-6 flex flex-col space-y-3">
+                  <div className="mt-auto space-y-3">
                     <button
                       onClick={() => {
                         setSelectedBooking(booking);

@@ -4,7 +4,15 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useState, useEffect, useRef } from "react";
 import StarRating from "../StarRating/StarRating";
-import { FaDoorOpen } from "react-icons/fa";
+import {
+  FaDoorOpen,
+  FaTheaterMasks,
+  FaTrophy,
+  FaUserFriends,
+  FaMoneyBillWave,
+  FaClock,
+  FaChild,
+} from "react-icons/fa";
 
 const RoomSlider = ({ escapeRooms }) => {
   const [largeScreen, setLargeScreen] = useState(null);
@@ -75,15 +83,33 @@ const RoomSlider = ({ escapeRooms }) => {
                       isEditable={false}
                     />
                   </div>
-                  <div className="text-white font-bold space-y-1">
-                    <p>Genre: {room.genre}</p>
-                    <p>Age: {room.ageGroup}</p>
-                    <p>
-                      Players: {room.playersMin}-{room.playersMax}
-                    </p>
-                    <p>Price: {room.price} UAH</p>
-                    <p>Difficulty: {room.difficulty}</p>
-                    <p>Duration: {room.duration}min</p>
+                  <div className="text-white space-y-2">
+                    <div className="flex items-center">
+                      <FaTheaterMasks className="text-orange-500 mr-2" />
+                      <p>Genre: {room.genre}</p>
+                    </div>
+                    <div className="flex items-center">
+                      <FaTrophy className="text-orange-500 mr-2" />
+                      <p>Difficulty: {room.difficulty}</p>
+                    </div>
+                    <div className="flex items-center">
+                      <FaChild className="text-orange-500 mr-2" />
+                      <p>Age: {room.ageGroup}</p>
+                    </div>
+                    <div className="flex items-center">
+                      <FaUserFriends className="text-orange-500 mr-2" />
+                      <p>
+                        Players: {room.playersMin}-{room.playersMax}
+                      </p>
+                    </div>
+                    <div className="flex items-center">
+                      <FaMoneyBillWave className="text-orange-500 mr-2" />
+                      <p>Price: {room.price} UAH</p>
+                    </div>
+                    <div className="flex items-center">
+                      <FaClock className="text-orange-500 mr-2" />
+                      <p>Duration: {room.duration}min</p>
+                    </div>
                   </div>
                 </div>
               </Link>

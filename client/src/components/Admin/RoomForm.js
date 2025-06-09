@@ -6,7 +6,7 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
     theme: room?.theme || "",
     genre: room?.genre || "",
     difficulty: room?.difficulty || "Beginner",
-    ageGroup: room?.ageGroup || "10+",
+    ageGroup: room?.ageGroup || "6+",
     playersMin: room?.playersMin || 2,
     playersMax: room?.playersMax || 4,
     price: room?.price || 500,
@@ -19,6 +19,12 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [priceError, setPriceError] = useState("");
   const [playersError, setPlayersError] = useState("");
+  const [validationErrors, setValidationErrors] = useState({
+    theme: "",
+    genre: "",
+    description: "",
+    image: "",
+  });
 
   useEffect(() => {
     validatePlayers();
@@ -31,6 +37,24 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
     }
     setPlayersError("");
     return true;
+  };
+
+  const validateFields = () => {
+    const errors = {
+      theme:
+        formData.theme.length > 40 ? "Theme must be 40 characters or less" : "",
+      genre:
+        formData.genre.length > 20 ? "Genre must be 20 characters or less" : "",
+      description:
+        formData.description.length > 400
+          ? "Description must be 400 characters or less"
+          : "",
+      image:
+        !room && !imageFile && !formData.image_url ? "Image is required" : "",
+    };
+
+    setValidationErrors(errors);
+    return !Object.values(errors).some((error) => error !== "");
   };
 
   const handleChange = (e) => {
@@ -53,7 +77,7 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (priceError || !validatePlayers()) return;
+    if (priceError || !validatePlayers() || !validateFields()) return;
 
     if (imageFile) {
       setIsUploading(true);
@@ -96,6 +120,7 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
           ...formData,
           image_url: reader.result,
         });
+        setValidationErrors((prev) => ({ ...prev, image: "" }));
       };
       reader.readAsDataURL(file);
     }
@@ -110,32 +135,50 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block mb-2">Theme</label>
+              <label className="block mb-2">Theme:</label>
               <input
                 type="text"
                 name="theme"
                 value={formData.theme}
                 onChange={handleChange}
+                maxLength={40}
                 className="w-full bg-zinc-800 text-slate-100 p-2 rounded"
                 required
               />
+              {validationErrors.theme && (
+                <p className="text-red-500 text-sm mt-1">
+                  {validationErrors.theme}
+                </p>
+              )}
+              <p className="text-xs text-gray-400 text-right">
+                {formData.theme.length}/40
+              </p>
             </div>
             <div>
-              <label className="block mb-2">Genre</label>
+              <label className="block mb-2">Genre:</label>
               <input
                 type="text"
                 name="genre"
                 value={formData.genre}
                 onChange={handleChange}
+                maxLength={20}
                 className="w-full bg-zinc-800 text-slate-100 p-2 rounded"
                 required
               />
+              {validationErrors.genre && (
+                <p className="text-red-500 text-sm mt-1">
+                  {validationErrors.genre}
+                </p>
+              )}
+              <p className="text-xs text-gray-400 text-right">
+                {formData.genre.length}/20
+              </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
-              <label className="block mb-2">Difficulty</label>
+              <label className="block mb-2">Difficulty:</label>
               <select
                 name="difficulty"
                 value={formData.difficulty}
@@ -150,7 +193,7 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
               </select>
             </div>
             <div>
-              <label className="block mb-2">Age Group</label>
+              <label className="block mb-2">Age Group:</label>
               <select
                 name="ageGroup"
                 value={formData.ageGroup}
@@ -166,7 +209,7 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
               </select>
             </div>
             <div>
-              <label className="block mb-2">Duration (minutes)</label>
+              <label className="block mb-2">Duration (minutes):</label>
               <select
                 name="duration"
                 value={formData.duration}
@@ -183,7 +226,7 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block mb-2">Minimum Players</label>
+              <label className="block mb-2">Minimum Players:</label>
               <input
                 type="number"
                 name="playersMin"
@@ -196,7 +239,7 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
               />
             </div>
             <div>
-              <label className="block mb-2">Maximum Players</label>
+              <label className="block mb-2">Maximum Players:</label>
               <input
                 type="number"
                 name="playersMax"
@@ -216,7 +259,7 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
           )}
 
           <div className="mb-4">
-            <label className="block mb-2">Price (UAH)</label>
+            <label className="block mb-2">Price (UAH):</label>
             <input
               type="number"
               name="price"
@@ -233,26 +276,59 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
           </div>
 
           <div className="mb-4">
-            <label className="block mb-2">Description</label>
+            <label className="block mb-2">Description:</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
+              maxLength={400}
               rows="4"
               className="w-full bg-zinc-800 text-slate-100 p-2 rounded"
               required
             />
+            {validationErrors.description && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.description}
+              </p>
+            )}
+            <p className="text-xs text-gray-400 text-right">
+              {formData.description.length}/400
+            </p>
           </div>
 
           <div className="mb-4">
-            <label className="block mb-2">Room Image</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="w-full bg-zinc-800 text-slate-100 p-2 rounded"
-              required
-            />
+            <label className="block mb-2">
+              Room Image: {!room && <span className="text-red-500">*</span>}
+            </label>
+            <div className="relative">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                id="fileInput"
+              />
+              <div className="w-full bg-zinc-800 text-slate-100 p-2 rounded flex items-center justify-between">
+                <span>{imageFile ? imageFile.name : "Choose file"}</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
+            {validationErrors.image && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.image}
+              </p>
+            )}
             {formData.image_url && (
               <div className="mt-2">
                 <img
@@ -276,7 +352,12 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
             <button
               type="submit"
               className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
-              disabled={isUploading || priceError || playersError}
+              disabled={
+                isUploading ||
+                priceError ||
+                playersError ||
+                Object.values(validationErrors).some((error) => error !== "")
+              }
             >
               {isUploading
                 ? "Uploading..."
