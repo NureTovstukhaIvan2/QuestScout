@@ -77,8 +77,7 @@ class AuthService {
     }
 
     window.google.accounts.id.initialize({
-      client_id:
-        "671664117284-v6heu97v1bdv3tm00n31jjicmtvabusl.apps.googleusercontent.com",
+      client_id: "",
       callback: callback,
     });
 
